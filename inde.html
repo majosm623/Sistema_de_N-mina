@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Nómina - Empresa</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+        
+        .employee-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .employee-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--secondary-color);
+            position: relative;
+        }
+        
+        .employee-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .employee-card p {
+            margin-bottom: 8px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .badge-salary {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .badge-hourly {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .badge-commission {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .badge-temporary {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .payroll-details {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+        
+        .payroll-details h4 {
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+        
+        .payroll-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .payroll-total {
+            font-weight: bold;
+            border-top: 1px solid #ddd;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--secondary-color);
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .database-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+        
+        .status-connected {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .status-disconnected {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-buttons button {
+            flex: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .employee-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                border-bottom: 1px solid #ddd;
+                border-left: 3px solid transparent;
+            }
+            
+            .tab.active {
+                border-bottom: 1px solid #ddd;
+                border-left: 3px solid var(--secondary-color);
+            }
+            
+            .database-status {
+                position: static;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema de Nómina Empresarial</h1>
+            <p>Gestión de empleados y cálculo de salarios</p>
+            <div id="database-status" class="database-status status-connected">
+                Base de Datos: Conectado
+            </div>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="employees">Gestión de Empleados</div>
+            <div class="tab" data-tab="payroll">Cálculo de Nómina</div>
+            <div class="tab" data-tab="reports">Reportes</div>
+            <div class="tab" data-tab="database">Gestión de Base de Datos</div>
+        </div>
+        
+        <div id="employees-tab" class="tab-content active">
+            <div class="card">
+                <h2>Registrar Nuevo Empleado</h2>
+                <form id="employee-form">
+                    <div class="form-group">
+                        <label for="employee-type">Tipo de Empleado</label>
+                        <select id="employee-type" required>
+                            <option value="">Seleccione un tipo</option>
+                            <option value="asalariado">Empleado Asalariado</option>
+                            <option value="horas">Empleado por Horas</option>
+                            <option value="comision">Empleado por Comisión</option>
+                            <option value="temporal">Empleado Temporal</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="employee-name">Nombre Completo</label>
+                        <input type="text" id="employee-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="employee-id">Identificación</label>
+                        <input type="text" id="employee-id" required>
+                    </div>
+                    
+                    <div id="asalariado-fields" class="employee-type-fields hidden">
+                        <div class="form-group">
+                            <label for="salary">Salario Mensual</label>
+                            <input type="number" id="salary" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="years-service">Años de Servicio</label>
+                            <input type="number" id="years-service" min="0" step="0.1">
+                        </div>
+                    </div>
+                    
+                    <div id="horas-fields" class="employee-type-fields hidden">
+                        <div class="form-group">
+                            <label for="hourly-rate">Tarifa por Hora</label>
+                            <input type="number" id="hourly-rate" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="hours-worked">Horas Trabajadas</label>
+                            <input type="number" id="hours-worked" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="years-service-hourly">Años de Servicio</label>
+                            <input type="number" id="years-service-hourly" min="0" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" id="savings-fund">
+                            <label for="savings-fund">Acceso a fondo de ahorro (2% del salario)</label>
+                        </div>
+                    </div>
+                    
+                    <div id="comision-fields" class="employee-type-fields hidden">
+                        <div class="form-group">
+                            <label for="base-salary">Salario Base</label>
+                            <input type="number" id="base-salary" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="commission-rate">Porcentaje de Comisión (%)</label>
+                            <input type="number" id="commission-rate" min="0" max="100" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="sales-amount">Monto de Ventas</label>
+                            <input type="number" id="sales-amount" min="0">
+                        </div>
+                    </div>
+                    
+                    <div id="temporal-fields" class="employee-type-fields hidden">
+                        <div class="form-group">
+                            <label for="temporary-salary">Salario Mensual</label>
+                            <input type="number" id="temporary-salary" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="contract-end">Fecha Fin de Contrato</label>
+                            <input type="date" id="contract-end">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-success">Registrar Empleado</button>
+                </form>
+            </div>
+            
+            <div class="card">
+                <h2>Lista de Empleados</h2>
+                <div id="employee-list" class="employee-list">
+                    <!-- Los empleados se mostrarán aquí dinámicamente -->
+                </div>
+            </div>
+        </div>
+        
+        <div id="payroll-tab" class="tab-content">
+            <div class="card">
+                <h2>Cálculo de Nómina</h2>
+                <div class="form-group">
+                    <label for="select-employee">Seleccionar Empleado</label>
+                    <select id="select-employee">
+                        <option value="">Seleccione un empleado</option>
+                    </select>
+                </div>
+                
+                <div id="payroll-result" class="payroll-details hidden">
+                    <!-- Los detalles de nómina se mostrarán aquí -->
+                </div>
+                
+                <button id="calculate-payroll" class="btn-success">Calcular Nómina</button>
+            </div>
+        </div>
+        
+        <div id="reports-tab" class="tab-content">
+            <div class="card">
+                <h2>Reportes de Nómina</h2>
+                <div class="form-group">
+                    <button id="generate-report" class="btn-success">Generar Reporte General</button>
+                    <button id="export-report" class="btn-warning">Exportar a JSON</button>
+                </div>
+                
+                <div id="report-result">
+                    <!-- El reporte se mostrará aquí -->
+                </div>
+            </div>
+        </div>
+        
+        <div id="database-tab" class="tab-content">
+            <div class="card">
+                <h2>Gestión de Base de Datos</h2>
+                <div class="form-group">
+                    <p>Estado de la base de datos: <span id="db-status-text">Conectado</span></p>
+                    <div class="action-buttons">
+                        <button id="backup-db" class="btn-success">Respaldar Datos</button>
+                        <button id="restore-db" class="btn-warning">Restaurar Datos</button>
+                        <button id="clear-db" class="btn-danger">Limpiar Base de Datos</button>
+                    </div>
+                </div>
+                
+                <div id="database-actions-result">
+                    <!-- Resultados de acciones de BD se mostrarán aquí -->
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Estadísticas de la Base de Datos</h2>
+                <div id="database-stats">
+                    <!-- Las estadísticas se mostrarán aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // IMPLEMENTACIÓN DE BASE DE DATOS (IndexedDB)
+        // =============================================
+        
+        class DatabaseService {
+            constructor() {
+                this.dbName = 'PayrollSystemDB';
+                this.dbVersion = 1;
+                this.db = null;
+                this.isConnected = false;
+            }
+            
+            async connect() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.dbVersion);
+                    
+                    request.onerror = () => {
+                        console.error('Error al conectar con la base de datos');
+                        this.isConnected = false;
+                        this.updateStatusIndicator();
+                        reject(request.error);
+                    };
+                    
+                    request.onsuccess = () => {
+                        this.db = request.result;
+                        this.isConnected = true;
+                        this.updateStatusIndicator();
+                        console.log('Conexión a BD establecida');
+                        resolve(this.db);
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        
+                        // Crear object store para empleados
+                        if (!db.objectStoreNames.contains('employees')) {
+                            const employeeStore = db.createObjectStore('employees', { keyPath: 'id' });
+                            employeeStore.createIndex('name', 'name', { unique: false });
+                            employeeStore.createIndex('type', 'type', { unique: false });
+                        }
+                        
+                        // Crear object store para nóminas
+                        if (!db.objectStoreNames.contains('payrolls')) {
+                            const payrollStore = db.createObjectStore('payrolls', { keyPath: 'id', autoIncrement: true });
+                            payrollStore.createIndex('employeeId', 'employeeId', { unique: false });
+                            payrollStore.createIndex('date', 'date', { unique: false });
+                        }
+                        
+                        // Crear object store para configuraciones
+                        if (!db.objectStoreNames.contains('settings')) {
+                            db.createObjectStore('settings', { keyPath: 'key' });
+                        }
+                    };
+                });
+            }
+            
+            updateStatusIndicator() {
+                const statusElement = document.getElementById('database-status');
+                const statusText = document.getElementById('db-status-text');
+                
+                if (this.isConnected) {
+                    statusElement.className = 'database-status status-connected';
+                    statusElement.textContent = 'Base de Datos: Conectado';
+                    if (statusText) statusText.textContent = 'Conectado';
+                } else {
+                    statusElement.className = 'database-status status-disconnected';
+                    statusElement.textContent = 'Base de Datos: Desconectado';
+                    if (statusText) statusText.textContent = 'Desconectado';
+                }
+            }
+            
+            async getAllEmployees() {
+                if (!this.isConnected) await this.connect();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['employees'], 'readonly');
+                    const store = transaction.objectStore('employees');
+                    const request = store.getAll();
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+            
+            async saveEmployee(employee) {
+                if (!this.isConnected) await this.connect();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['employees'], 'readwrite');
+                    const store = transaction.objectStore('employees');
+                    
+                    // Convertir el objeto empleado a formato almacenable
+                    const employeeData = {
+                        id: employee.id,
+                        name: employee.name,
+                        type: employee.constructor.name,
+                        data: this.serializeEmployee(employee)
+                    };
+                    
+                    const request = store.put(employeeData);
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+            
+            async deleteEmployee(employeeId) {
+                if (!this.isConnected) await this.connect();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['employees'], 'readwrite');
+                    const store = transaction.objectStore('employees');
+                    const request = store.delete(employeeId);
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+            
+            async savePayrollRecord(employeeId, payrollData) {
+                if (!this.isConnected) await this.connect();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['payrolls'], 'readwrite');
+                    const store = transaction.objectStore('payrolls');
+                    
+                    const record = {
+                        employeeId: employeeId,
+                        date: new Date().toISOString(),
+                        data: payrollData
+                    };
+                    
+                    const request = store.add(record);
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+            
+            async getPayrollHistory(employeeId) {
+                if (!this.isConnected) await this.connect();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['payrolls'], 'readonly');
+                    const store = transaction.objectStore('payrolls');
+                    const index = store.index('employeeId');
+                    const request = index.getAll(employeeId);
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+            
+            async backupData() {
+                if (!this.isConnected) await this.connect();
+                
+                const employees = await this.getAllEmployees();
+                const settings = await this.getSettings();
+                
+                const backup = {
+                    timestamp: new Date().toISOString(),
+                    version: this.dbVersion,
+                    employees: employees,
+                    settings: settings
+                };
+                
+                return backup;
+            }
+            
+            async restoreData(backupData) {
+                if (!this.isConnected) await this.connect();
+                
+                // Limpiar base de datos actual
+                await this.clearDatabase();
+                
+                // Restaurar empleados
+                for (const employeeData of backupData.employees) {
+                    await this.saveEmployee(this.deserializeEmployee(employeeData));
+                }
+                
+                // Restaurar configuraciones
+                for (const setting of backupData.settings) {
+                    await this.saveSetting(setting.key, setting.value);
+                }
+                
+                return true;
+            }
+            
+            async clearDatabase() {
+                if (!this.isConnected) await this.connect();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['employees', 'payrolls', 'settings'], 'readwrite');
+                    
+                    transaction.objectStore('employees').clear();
+                    transaction.objectStore('payrolls').clear();
+                    transaction.objectStore('settings').clear();
+                    
+                    transaction.oncomplete = () => resolve();
+                    transaction.onerror = () => reject(transaction.error);
+                });
+            }
+            
+            async getDatabaseStats() {
+                if (!this.isConnected) await this.connect();
+                
+                const employees = await this.getAllEmployees();
+                const employeeCount = employees.length;
+                
+                // Contar por tipo
+                const typeCount = {};
+                employees.forEach(emp => {
+                    typeCount[emp.type] = (typeCount[emp.type] || 0) + 1;
+                });
+                
+                return {
+                    totalEmployees: employeeCount,
+                    byType: typeCount,
+                    lastBackup: await this.getSetting('lastBackup') || 'Nunca'
+                };
+            }
+            
+            async saveSetting(key, value) {
+                if (!this.isConnected) await this.connect();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['settings'], 'readwrite');
+                    const store = transaction.objectStore('settings');
+                    const request = store.put({ key, value });
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+            
+            async getSetting(key) {
+                if (!this.isConnected) await this.connect();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['settings'], 'readonly');
+                    const store = transaction.objectStore('settings');
+                    const request = store.get(key);
+                    
+                    request.onsuccess = () => resolve(request.result ? request.result.value : null);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+            
+            async getSettings() {
+                if (!this.isConnected) await this.connect();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['settings'], 'readonly');
+                    const store = transaction.objectStore('settings');
+                    const request = store.getAll();
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+            
+            serializeEmployee(employee) {
+                // Convertir objeto empleado a datos serializables
+                const data = { ...employee };
+                // Eliminar métodos
+                delete data.calculateSalary;
+                delete data.calculateDeductions;
+                delete data.validate;
+                return data;
+            }
+            
+            deserializeEmployee(employeeData) {
+                // Reconstruir objeto empleado desde datos serializados
+                const { type, data } = employeeData;
+                
+                switch(type) {
+                    case 'SalariedEmployee':
+                        return new SalariedEmployee(data.name, data.id, data.monthlySalary, data.yearsOfService);
+                    case 'HourlyEmployee':
+                        return new HourlyEmployee(data.name, data.id, data.hourlyRate, data.hoursWorked, data.yearsOfService, data.hasSavingsFund);
+                    case 'CommissionEmployee':
+                        return new CommissionEmployee(data.name, data.id, data.baseSalary, data.commissionRate * 100, data.salesAmount);
+                    case 'TemporaryEmployee':
+                        return new TemporaryEmployee(data.name, data.id, data.monthlySalary, data.contractEndDate);
+                    default:
+                        throw new Error(`Tipo de empleado desconocido: ${type}`);
+                }
+            }
+        }
+
+        // =============================================
+        // CLASES DEL SISTEMA DE NÓMINA (SOLID)
+        // =============================================
+        
+        class Employee {
+            constructor(name, id) {
+                if (this.constructor === Employee) {
+                    throw new Error("No se puede instanciar la clase abstracta Employee");
+                }
+                this.name = name;
+                this.id = id;
+            }
+            
+            calculateSalary() {
+                throw new Error("Método calculateSalary debe ser implementado");
+            }
+            
+            calculateDeductions(grossSalary) {
+                const socialSecurity = grossSalary * 0.04; // 4% para seguro social y pensión
+                return socialSecurity;
+            }
+            
+            validate() {
+                if (!this.name || !this.id) {
+                    throw new Error("Nombre e identificación son obligatorios");
+                }
+            }
+        }
+        
+        class SalariedEmployee extends Employee {
+            constructor(name, id, monthlySalary, yearsOfService) {
+                super(name, id);
+                this.monthlySalary = parseFloat(monthlySalary);
+                this.yearsOfService = parseFloat(yearsOfService);
+                this.validate();
+            }
+            
+            validate() {
+                super.validate();
+                if (this.monthlySalary < 0) {
+                    throw new Error("El salario no puede ser negativo");
+                }
+                if (this.yearsOfService < 0) {
+                    throw new Error("Los años de servicio no pueden ser negativos");
+                }
+            }
+            
+            calculateSalary() {
+                let grossSalary = this.monthlySalary;
+                
+                // Bono del 10% si lleva más de 5 años
+                if (this.yearsOfService > 5) {
+                    grossSalary += this.monthlySalary * 0.1;
+                }
+                
+                // Bono de alimentación para empleados permanentes
+                grossSalary += 1000000;
+                
+                const deductions = this.calculateDeductions(grossSalary);
+                const netSalary = grossSalary - deductions;
+                
+                if (netSalary < 0) {
+                    throw new Error("El salario neto no puede ser negativo");
+                }
+                
+                return {
+                    grossSalary,
+                    deductions,
+                    netSalary,
+                    bonus: this.yearsOfService > 5 ? this.monthlySalary * 0.1 : 0,
+                    foodBonus: 1000000
+                };
+            }
+        }
+        
+        class HourlyEmployee extends Employee {
+            constructor(name, id, hourlyRate, hoursWorked, yearsOfService, hasSavingsFund = false) {
+                super(name, id);
+                this.hourlyRate = parseFloat(hourlyRate);
+                this.hoursWorked = parseFloat(hoursWorked);
+                this.yearsOfService = parseFloat(yearsOfService);
+                this.hasSavingsFund = hasSavingsFund;
+                this.validate();
+            }
+            
+            validate() {
+                super.validate();
+                if (this.hourlyRate < 0) {
+                    throw new Error("La tarifa por hora no puede ser negativa");
+                }
+                if (this.hoursWorked < 0) {
+                    throw new Error("Las horas trabajadas no pueden ser negativas");
+                }
+                if (this.yearsOfService < 0) {
+                    throw new Error("Los años de servicio no pueden ser negativos");
+                }
+            }
+            
+            calculateSalary() {
+                let regularHours = Math.min(this.hoursWorked, 40);
+                let overtimeHours = Math.max(this.hoursWorked - 40, 0);
+                
+                let grossSalary = (regularHours * this.hourlyRate) + 
+                                (overtimeHours * this.hourlyRate * 1.5);
+                
+                // Fondo de ahorro para empleados con más de 1 año
+                let savingsDeduction = 0;
+                if (this.yearsOfService > 1 && this.hasSavingsFund) {
+                    savingsDeduction = grossSalary * 0.02;
+                }
+                
+                const socialDeductions = this.calculateDeductions(grossSalary);
+                const deductions = socialDeductions + savingsDeduction;
+                const netSalary = grossSalary - deductions;
+                
+                if (netSalary < 0) {
+                    throw new Error("El salario neto no puede ser negativo");
+                }
+                
+                return {
+                    grossSalary,
+                    deductions,
+                    netSalary,
+                    overtime: overtimeHours > 0 ? overtimeHours * this.hourlyRate * 0.5 : 0,
+                    savingsDeduction
+                };
+            }
+        }
+        
+        class CommissionEmployee extends Employee {
+            constructor(name, id, baseSalary, commissionRate, salesAmount) {
+                super(name, id);
+                this.baseSalary = parseFloat(baseSalary);
+                this.commissionRate = parseFloat(commissionRate) / 100;
+                this.salesAmount = parseFloat(salesAmount);
+                this.validate();
+            }
+            
+            validate() {
+                super.validate();
+                if (this.baseSalary < 0) {
+                    throw new Error("El salario base no puede ser negativo");
+                }
+                if (this.commissionRate < 0) {
+                    throw new Error("La tasa de comisión no puede ser negativa");
+                }
+                if (this.salesAmount < 0) {
+                    throw new Error("El monto de ventas no puede ser negativo");
+                }
+            }
+            
+            calculateSalary() {
+                let grossSalary = this.baseSalary;
+                
+                // Comisión sobre ventas
+                const commission = this.salesAmount * this.commissionRate;
+                grossSalary += commission;
+                
+                // Bono adicional si las ventas superan $20,000,000
+                let salesBonus = 0;
+                if (this.salesAmount > 20000000) {
+                    salesBonus = this.salesAmount * 0.03;
+                    grossSalary += salesBonus;
+                }
+                
+                // Bono de alimentación para empleados permanentes
+                grossSalary += 1000000;
+                
+                const deductions = this.calculateDeductions(grossSalary);
+                const netSalary = grossSalary - deductions;
+                
+                if (netSalary < 0) {
+                    throw new Error("El salario neto no puede ser negativo");
+                }
+                
+                return {
+                    grossSalary,
+                    deductions,
+                    netSalary,
+                    commission,
+                    salesBonus,
+                    foodBonus: 1000000
+                };
+            }
+        }
+        
+        class TemporaryEmployee extends Employee {
+            constructor(name, id, monthlySalary, contractEndDate) {
+                super(name, id);
+                this.monthlySalary = parseFloat(monthlySalary);
+                this.contractEndDate = contractEndDate;
+                this.validate();
+            }
+            
+            validate() {
+                super.validate();
+                if (this.monthlySalary < 0) {
+                    throw new Error("El salario no puede ser negativo");
+                }
+            }
+            
+            calculateSalary() {
+                const grossSalary = this.monthlySalary;
+                const deductions = this.calculateDeductions(grossSalary);
+                const netSalary = grossSalary - deductions;
+                
+                if (netSalary < 0) {
+                    throw new Error("El salario neto no puede ser negativo");
+                }
+                
+                return {
+                    grossSalary,
+                    deductions,
+                    netSalary
+                };
+            }
+        }
+        
+        // =============================================
+        // SISTEMA PRINCIPAL DE NÓMINA
+        // =============================================
+        
+        class PayrollSystem {
+            constructor() {
+                this.employees = [];
+                this.database = new DatabaseService();
+                this.init();
+            }
+            
+            async init() {
+                try {
+                    await this.database.connect();
+                    await this.loadEmployees();
+                    this.setupEventListeners();
+                    this.renderEmployeeList();
+                    this.updateEmployeeSelect();
+                    this.showAlert('Sistema inicializado correctamente', 'success');
+                } catch (error) {
+                    this.showAlert(`Error al inicializar: ${error.message}`, 'danger');
+                }
+            }
+            
+            setupEventListeners() {
+                // Cambio de tipo de empleado
+                document.getElementById('employee-type').addEventListener('change', (e) => {
+                    this.toggleEmployeeFields(e.target.value);
+                });
+                
+                // Envío del formulario
+                document.getElementById('employee-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addEmployee();
+                });
+                
+                // Tabs
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        this.switchTab(tab.dataset.tab);
+                    });
+                });
+                
+                // Cálculo de nómina
+                document.getElementById('calculate-payroll').addEventListener('click', () => {
+                    this.calculatePayroll();
+                });
+                
+                // Generar reporte
+                document.getElementById('generate-report').addEventListener('click', () => {
+                    this.generateReport();
+                });
+                
+                // Exportar reporte
+                document.getElementById('export-report').addEventListener('click', () => {
+                    this.exportReport();
+                });
+                
+                // Gestión de base de datos
+                document.getElementById('backup-db').addEventListener('click', () => {
+                    this.backupDatabase();
+                });
+                
+                document.getElementById('restore-db').addEventListener('click', () => {
+                    this.restoreDatabase();
+                });
+                
+                document.getElementById('clear-db').addEventListener('click', () => {
+                    this.clearDatabase();
+                });
+                
+                // Al cargar la pestaña de base de datos, actualizar estadísticas
+                document.querySelector('[data-tab="database"]').addEventListener('click', () => {
+                    this.showDatabaseStats();
+                });
+            }
+            
+            toggleEmployeeFields(type) {
+                // Ocultar todos los campos específicos
+                document.querySelectorAll('.employee-type-fields').forEach(field => {
+                    field.classList.add('hidden');
+                });
+                
+                // Mostrar campos correspondientes al tipo seleccionado
+                if (type) {
+                    document.getElementById(`${type}-fields`).classList.remove('hidden');
+                }
+            }
+            
+            async addEmployee() {
+                try {
+                    const type = document.getElementById('employee-type').value;
+                    const name = document.getElementById('employee-name').value;
+                    const id = document.getElementById('employee-id').value;
+                    
+                    let employee;
+                    
+                    switch(type) {
+                        case 'asalariado':
+                            const salary = document.getElementById('salary').value;
+                            const yearsService = document.getElementById('years-service').value;
+                            employee = new SalariedEmployee(name, id, salary, yearsService);
+                            break;
+                            
+                        case 'horas':
+                            const hourlyRate = document.getElementById('hourly-rate').value;
+                            const hoursWorked = document.getElementById('hours-worked').value;
+                            const yearsServiceHourly = document.getElementById('years-service-hourly').value;
+                            const hasSavingsFund = document.getElementById('savings-fund').checked;
+                            employee = new HourlyEmployee(name, id, hourlyRate, hoursWorked, yearsServiceHourly, hasSavingsFund);
+                            break;
+                            
+                        case 'comision':
+                            const baseSalary = document.getElementById('base-salary').value;
+                            const commissionRate = document.getElementById('commission-rate').value;
+                            const salesAmount = document.getElementById('sales-amount').value;
+                            employee = new CommissionEmployee(name, id, baseSalary, commissionRate, salesAmount);
+                            break;
+                            
+                        case 'temporal':
+                            const temporarySalary = document.getElementById('temporary-salary').value;
+                            const contractEnd = document.getElementById('contract-end').value;
+                            employee = new TemporaryEmployee(name, id, temporarySalary, contractEnd);
+                            break;
+                            
+                        default:
+                            throw new Error("Tipo de empleado no válido");
+                    }
+                    
+                    // Guardar en base de datos
+                    await this.database.saveEmployee(employee);
+                    
+                    // Actualizar lista local
+                    this.employees.push(employee);
+                    this.renderEmployeeList();
+                    this.updateEmployeeSelect();
+                    this.clearForm();
+                    
+                    this.showAlert('Empleado registrado exitosamente', 'success');
+                    
+                } catch (error) {
+                    this.showAlert(`Error: ${error.message}`, 'danger');
+                }
+            }
+            
+            clearForm() {
+                document.getElementById('employee-form').reset();
+                document.querySelectorAll('.employee-type-fields').forEach(field => {
+                    field.classList.add('hidden');
+                });
+            }
+            
+            async loadEmployees() {
+                try {
+                    const employeesData = await this.database.getAllEmployees();
+                    this.employees = employeesData.map(data => this.database.deserializeEmployee(data));
+                    this.renderEmployeeList();
+                    this.updateEmployeeSelect();
+                } catch (error) {
+                    console.error('Error al cargar empleados:', error);
+                    this.showAlert('Error al cargar empleados desde la base de datos', 'danger');
+                }
+            }
+            
+            renderEmployeeList() {
+                const container = document.getElementById('employee-list');
+                container.innerHTML = '';
+                
+                if (this.employees.length === 0) {
+                    container.innerHTML = '<p>No hay empleados registrados</p>';
+                    return;
+                }
+                
+                this.employees.forEach((employee, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'employee-card';
+                    
+                    let typeBadge = '';
+                    let details = '';
+                    
+                    if (employee instanceof SalariedEmployee) {
+                        typeBadge = '<span class="badge badge-salary">Asalariado</span>';
+                        details = `<p><strong>Salario:</strong> $${employee.monthlySalary.toLocaleString()}</p>
+                                  <p><strong>Años de servicio:</strong> ${employee.yearsOfService}</p>`;
+                    } else if (employee instanceof HourlyEmployee) {
+                        typeBadge = '<span class="badge badge-hourly">Por Horas</span>';
+                        details = `<p><strong>Tarifa por hora:</strong> $${employee.hourlyRate.toLocaleString()}</p>
+                                  <p><strong>Horas trabajadas:</strong> ${employee.hoursWorked}</p>
+                                  <p><strong>Años de servicio:</strong> ${employee.yearsOfService}</p>
+                                  <p><strong>Fondo de ahorro:</strong> ${employee.hasSavingsFund ? 'Sí' : 'No'}</p>`;
+                    } else if (employee instanceof CommissionEmployee) {
+                        typeBadge = '<span class="badge badge-commission">Por Comisión</span>';
+                        details = `<p><strong>Salario base:</strong> $${employee.baseSalary.toLocaleString()}</p>
+                                  <p><strong>Tasa de comisión:</strong> ${(employee.commissionRate * 100)}%</p>
+                                  <p><strong>Ventas:</strong> $${employee.salesAmount.toLocaleString()}</p>`;
+                    } else if (employee instanceof TemporaryEmployee) {
+                        typeBadge = '<span class="badge badge-temporary">Temporal</span>';
+                        details = `<p><strong>Salario:</strong> $${employee.monthlySalary.toLocaleString()}</p>
+                                  <p><strong>Fin de contrato:</strong> ${employee.contractEndDate}</p>`;
+                    }
+                    
+                    card.innerHTML = `
+                        <h3>${employee.name}</h3>
+                        ${typeBadge}
+                        <p><strong>ID:</strong> ${employee.id}</p>
+                        ${details}
+                        <div class="action-buttons">
+                            <button class="btn-danger" onclick="payrollSystem.removeEmployee('${employee.id}')">Eliminar</button>
+                            <button class="btn-warning" onclick="payrollSystem.viewPayrollHistory('${employee.id}')">Historial</button>
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+            }
+            
+            async removeEmployee(employeeId) {
+                if (confirm('¿Está seguro de que desea eliminar este empleado?')) {
+                    try {
+                        await this.database.deleteEmployee(employeeId);
+                        
+                        // Actualizar lista local
+                        this.employees = this.employees.filter(emp => emp.id !== employeeId);
+                        this.renderEmployeeList();
+                        this.updateEmployeeSelect();
+                        
+                        this.showAlert('Empleado eliminado exitosamente', 'success');
+                    } catch (error) {
+                        this.showAlert(`Error al eliminar empleado: ${error.message}`, 'danger');
+                    }
+                }
+            }
+            
+            updateEmployeeSelect() {
+                const select = document.getElementById('select-employee');
+                // Mantener la primera opción
+                while (select.children.length > 1) {
+                    select.removeChild(select.lastChild);
+                }
+                
+                this.employees.forEach((employee) => {
+                    const option = document.createElement('option');
+                    option.value = employee.id;
+                    option.textContent = `${employee.name} (${employee.id})`;
+                    select.appendChild(option);
+                });
+            }
+            
+            async calculatePayroll() {
+                const select = document.getElementById('select-employee');
+                const employeeId = select.value;
+                
+                if (employeeId === '') {
+                    this.showAlert('Por favor seleccione un empleado', 'danger');
+                    return;
+                }
+                
+                try {
+                    const employee = this.employees.find(emp => emp.id === employeeId);
+                    if (!employee) {
+                        throw new Error('Empleado no encontrado');
+                    }
+                    
+                    const salaryDetails = employee.calculateSalary();
+                    
+                    // Guardar registro en base de datos
+                    await this.database.savePayrollRecord(employeeId, salaryDetails);
+                    
+                    const resultDiv = document.getElementById('payroll-result');
+                    resultDiv.classList.remove('hidden');
+                    
+                    let detailsHtml = `
+                        <h4>Detalles de Nómina - ${employee.name}</h4>
+                        <div class="payroll-item">
+                            <span>Salario Bruto:</span>
+                            <span>$${salaryDetails.grossSalary.toLocaleString()}</span>
+                        </div>
+                    `;
+                    
+                    // Agregar detalles específicos según el tipo de empleado
+                    if (employee instanceof SalariedEmployee) {
+                        if (salaryDetails.bonus > 0) {
+                            detailsHtml += `
+                                <div class="payroll-item">
+                                    <span>Bono por antigüedad:</span>
+                                    <span>$${salaryDetails.bonus.toLocaleString()}</span>
+                                </div>
+                            `;
+                        }
+                        detailsHtml += `
+                            <div class="payroll-item">
+                                <span>Bono de alimentación:</span>
+                                <span>$${salaryDetails.foodBonus.toLocaleString()}</span>
+                            </div>
+                        `;
+                    } else if (employee instanceof HourlyEmployee) {
+                        if (salaryDetails.overtime > 0) {
+                            detailsHtml += `
+                                <div class="payroll-item">
+                                    <span>Pago por horas extras:</span>
+                                    <span>$${salaryDetails.overtime.toLocaleString()}</span>
+                                </div>
+                            `;
+                        }
+                        if (salaryDetails.savingsDeduction > 0) {
+                            detailsHtml += `
+                                <div class="payroll-item">
+                                    <span>Deducción fondo de ahorro:</span>
+                                    <span>-$${salaryDetails.savingsDeduction.toLocaleString()}</span>
+                                </div>
+                            `;
+                        }
+                    } else if (employee instanceof CommissionEmployee) {
+                        detailsHtml += `
+                            <div class="payroll-item">
+                                <span>Comisión por ventas:</span>
+                                <span>$${salaryDetails.commission.toLocaleString()}</span>
+                            </div>
+                        `;
+                        if (salaryDetails.salesBonus > 0) {
+                            detailsHtml += `
+                                <div class="payroll-item">
+                                    <span>Bono por ventas:</span>
+                                    <span>$${salaryDetails.salesBonus.toLocaleString()}</span>
+                                </div>
+                            `;
+                        }
+                        detailsHtml += `
+                            <div class="payroll-item">
+                                <span>Bono de alimentación:</span>
+                                <span>$${salaryDetails.foodBonus.toLocaleString()}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    detailsHtml += `
+                        <div class="payroll-item">
+                            <span>Deducciones (Seguro Social 4%):</span>
+                            <span>-$${salaryDetails.deductions.toLocaleString()}</span>
+                        </div>
+                        <div class="payroll-item payroll-total">
+                            <span>Salario Neto:</span>
+                            <span>$${salaryDetails.netSalary.toLocaleString()}</span>
+                        </div>
+                        <p><small>Registro guardado en base de datos</small></p>
+                    `;
+                    
+                    resultDiv.innerHTML = detailsHtml;
+                    
+                } catch (error) {
+                    this.showAlert(`Error al calcular nómina: ${error.message}`, 'danger');
+                }
+            }
+            
+            async viewPayrollHistory(employeeId) {
+                try {
+                    const history = await this.database.getPayrollHistory(employeeId);
+                    const employee = this.employees.find(emp => emp.id === employeeId);
+                    
+                    if (history.length === 0) {
+                        alert(`${employee.name} no tiene registros de nómina`);
+                        return;
+                    }
+                    
+                    let historyHtml = `<h3>Historial de Nómina - ${employee.name}</h3>`;
+                    
+                    history.forEach(record => {
+                        historyHtml += `
+                            <div class="payroll-details" style="margin-bottom: 15px;">
+                                <h4>${new Date(record.date).toLocaleDateString()}</h4>
+                                <div class="payroll-item">
+                                    <span>Salario Bruto:</span>
+                                    <span>$${record.data.grossSalary.toLocaleString()}</span>
+                                </div>
+                                <div class="payroll-item">
+                                    <span>Deducciones:</span>
+                                    <span>$${record.data.deductions.toLocaleString()}</span>
+                                </div>
+                                <div class="payroll-item payroll-total">
+                                    <span>Salario Neto:</span>
+                                    <span>$${record.data.netSalary.toLocaleString()}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    // Mostrar en una ventana emergente o en la sección de reportes
+                    this.switchTab('reports');
+                    document.getElementById('report-result').innerHTML = historyHtml;
+                    
+                } catch (error) {
+                    this.showAlert(`Error al cargar historial: ${error.message}`, 'danger');
+                }
+            }
+            
+            generateReport() {
+                const reportDiv = document.getElementById('report-result');
+                
+                if (this.employees.length === 0) {
+                    reportDiv.innerHTML = '<p>No hay empleados para generar reporte</p>';
+                    return;
+                }
+                
+                let reportHtml = '<h3>Reporte General de Nómina</h3>';
+                let totalGross = 0;
+                let totalDeductions = 0;
+                let totalNet = 0;
+                
+                this.employees.forEach(employee => {
+                    try {
+                        const salaryDetails = employee.calculateSalary();
+                        totalGross += salaryDetails.grossSalary;
+                        totalDeductions += salaryDetails.deductions;
+                        totalNet += salaryDetails.netSalary;
+                        
+                        reportHtml += `
+                            <div class="employee-card">
+                                <h4>${employee.name} (${employee.id})</h4>
+                                <p><strong>Tipo:</strong> ${employee.constructor.name.replace('Employee', '')}</p>
+                                <p><strong>Salario Bruto:</strong> $${salaryDetails.grossSalary.toLocaleString()}</p>
+                                <p><strong>Deducciones:</strong> $${salaryDetails.deductions.toLocaleString()}</p>
+                                <p><strong>Salario Neto:</strong> $${salaryDetails.netSalary.toLocaleString()}</p>
+                            </div>
+                        `;
+                    } catch (error) {
+                        reportHtml += `
+                            <div class="employee-card">
+                                <h4>${employee.name} (${employee.id})</h4>
+                                <p class="alert-danger">Error: ${error.message}</p>
+                            </div>
+                        `;
+                    }
+                });
+                
+                reportHtml += `
+                    <div class="payroll-details">
+                        <h4>Totales</h4>
+                        <div class="payroll-item">
+                            <span>Total Salario Bruto:</span>
+                            <span>$${totalGross.toLocaleString()}</span>
+                        </div>
+                        <div class="payroll-item">
+                            <span>Total Deducciones:</span>
+                            <span>$${totalDeductions.toLocaleString()}</span>
+                        </div>
+                        <div class="payroll-item payroll-total">
+                            <span>Total Salario Neto:</span>
+                            <span>$${totalNet.toLocaleString()}</span>
+                        </div>
+                    </div>
+                `;
+                
+                reportDiv.innerHTML = reportHtml;
+            }
+            
+            exportReport() {
+                const reportData = {
+                    generated: new Date().toISOString(),
+                    employees: this.employees.map(emp => {
+                        try {
+                            const salary = emp.calculateSalary();
+                            return {
+                                id: emp.id,
+                                name: emp.name,
+                                type: emp.constructor.name,
+                                grossSalary: salary.grossSalary,
+                                deductions: salary.deductions,
+                                netSalary: salary.netSalary
+                            };
+                        } catch (error) {
+                            return {
+                                id: emp.id,
+                                name: emp.name,
+                                type: emp.constructor.name,
+                                error: error.message
+                            };
+                        }
+                    })
+                };
+                
+                const dataStr = JSON.stringify(reportData, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(dataBlob);
+                link.download = `reporte_nomina_${new Date().toISOString().split('T')[0]}.json`;
+                link.click();
+                
+                this.showAlert('Reporte exportado correctamente', 'success');
+            }
+            
+            async backupDatabase() {
+                try {
+                    const backup = await this.database.backupData();
+                    const dataStr = JSON.stringify(backup, null, 2);
+                    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                    
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(dataBlob);
+                    link.download = `backup_nomina_${new Date().toISOString().split('T')[0]}.json`;
+                    link.click();
+                    
+                    // Guardar fecha del último respaldo
+                    await this.database.saveSetting('lastBackup', new Date().toISOString());
+                    
+                    this.showAlert('Respaldo creado correctamente', 'success');
+                } catch (error) {
+                    this.showAlert(`Error al crear respaldo: ${error.message}`, 'danger');
+                }
+            }
+            
+            restoreDatabase() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                
+                input.onchange = async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    try {
+                        const fileText = await file.text();
+                        const backupData = JSON.parse(fileText);
+                        
+                        if (confirm('¿Está seguro de que desea restaurar los datos? Esto sobrescribirá la base de datos actual.')) {
+                            await this.database.restoreData(backupData);
+                            await this.loadEmployees();
+                            this.showAlert('Datos restaurados correctamente', 'success');
+                        }
+                    } catch (error) {
+                        this.showAlert(`Error al restaurar datos: ${error.message}`, 'danger');
+                    }
+                };
+                
+                input.click();
+            }
+            
+            async clearDatabase() {
+                if (confirm('¿Está seguro de que desea limpiar toda la base de datos? Esta acción no se puede deshacer.')) {
+                    try {
+                        await this.database.clearDatabase();
+                        this.employees = [];
+                        this.renderEmployeeList();
+                        this.updateEmployeeSelect();
+                        this.showAlert('Base de datos limpiada correctamente', 'success');
+                    } catch (error) {
+                        this.showAlert(`Error al limpiar base de datos: ${error.message}`, 'danger');
+                    }
+                }
+            }
+            
+            async showDatabaseStats() {
+                try {
+                    const stats = await this.database.getDatabaseStats();
+                    const statsDiv = document.getElementById('database-stats');
+                    
+                    let statsHtml = `
+                        <div class="payroll-details">
+                            <div class="payroll-item">
+                                <span>Total de empleados:</span>
+                                <span>${stats.totalEmployees}</span>
+                            </div>
+                    `;
+                    
+                    for (const [type, count] of Object.entries(stats.byType)) {
+                        statsHtml += `
+                            <div class="payroll-item">
+                                <span>${type.replace('Employee', '')}:</span>
+                                <span>${count}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    statsHtml += `
+                            <div class="payroll-item">
+                                <span>Último respaldo:</span>
+                                <span>${stats.lastBackup !== 'Nunca' ? new Date(stats.lastBackup).toLocaleDateString() : 'Nunca'}</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    statsDiv.innerHTML = statsHtml;
+                } catch (error) {
+                    document.getElementById('database-stats').innerHTML = 
+                        `<p class="alert-danger">Error al cargar estadísticas: ${error.message}</p>`;
+                }
+            }
+            
+            switchTab(tabName) {
+                // Desactivar todas las pestañas
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Activar la pestaña seleccionada
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+            }
+            
+            showAlert(message, type) {
+                // Eliminar alertas existentes
+                const existingAlerts = document.querySelectorAll('.alert');
+                existingAlerts.forEach(alert => alert.remove());
+                
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type}`;
+                alert.textContent = message;
+                
+                document.querySelector('.container').insertBefore(alert, document.querySelector('.tabs'));
+                
+                // Auto-eliminar después de 5 segundos
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.parentNode.removeChild(alert);
+                    }
+                }, 5000);
+            }
+        }
+        
+        // Inicializar el sistema cuando se carga la página
+        let payrollSystem;
+        document.addEventListener('DOMContentLoaded', () => {
+            payrollSystem = new PayrollSystem();
+        });
+    </script>
+</body>
+</html>
